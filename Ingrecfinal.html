@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Label Ai</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.1.1/dist/tesseract.min.js"></script>
+
+<style>
+:root{
+  --bg:#f2f2f7;
+  --card:#fff;
+  --text:#111;
+  --sub:#6e6e73;
+  --blue:#007aff;
+  --green:#34c759;
+  --yellow:#ff9f0a;
+  --red:#ff3b30;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+.app{
+  max-width:430px;
+  margin:auto;
+  min-height:100vh;
+  padding:20px 16px 40px;
+}
+.page{display:none}
+.page.active{
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  animation:fade .3s ease;
+}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1}}
+
+.card{
+  background:var(--card);
+  border-radius:22px;
+  padding:20px;
+  margin-bottom:16px;
+  box-shadow:0 12px 30px rgba(0,0,0,.08);
+}
+button{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:18px;
+  background:var(--blue);
+  color:white;
+  font-size:16px;
+  font-weight:600;
+}
+input{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid #ddd;
+  margin:10px 0;
+}
+.toggle{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 0;
+  border-bottom:1px solid #eee;
+}
+.progress{
+  text-align:center;
+  font-size:12px;
+  color:var(--sub);
+  margin-bottom:10px;
+}
+
+/* Splash */
+.splash{
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.logo-wrap{
+  width:140px;
+  height:140px;
+  border-radius:34px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 20px 50px rgba(0,0,0,.25);
+  margin-bottom:26px;
+}
+.splash h1{font-size:32px;margin:0}
+.splash p{color:var(--sub);font-size:14px;margin:10px 0 34px}
+
+/* Score */
+.score-circle{
+  width:140px;
+  height:140px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:10px auto;
+}
+.green{background:linear-gradient(135deg,#34c759,#28b24c)}
+.yellow{background:linear-gradient(135deg,#ff9f0a,#e88900)}
+.red{background:linear-gradient(135deg,#ff3b30,#e63228)}
+.score-text{color:white;font-size:44px;font-weight:700}
+
+.badge{
+  display:inline-block;
+  padding:8px 18px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:600;
+  margin-top:10px;
+}
+.flag{
+  padding:12px;
+  border-radius:14px;
+  margin:8px 0;
+  font-size:14px;
+}
+.flag.alert{background:#fdecea}
+.flag.good{background:#eafaf1}
+
+.privacy{
+  font-size:11px;
+  color:var(--sub);
+  text-align:center;
+  margin-top:12px;
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<!-- SPLASH -->
+<div class="page splash active" id="splash">
+  <div class="logo-wrap">
+    <svg width="96" height="96" viewBox="0 0 120 120">
+      <defs>
+        <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#007aff"/>
+          <stop offset="100%" stop-color="#34c759"/>
+        </linearGradient>
+      </defs>
+      <rect x="8" y="8" width="104" height="104" rx="28" fill="url(#g)"/>
+      <circle cx="54" cy="54" r="22" fill="none" stroke="white" stroke-width="6"/>
+      <line x1="70" y1="70" x2="88" y2="88" stroke="white" stroke-width="6" stroke-linecap="round"/>
+      <path d="M54 40 C47 42,42 48,42 55 C42 63,49 70,54 72 C59 70,66 63,66 55 C66 48,61 42,54 40Z" fill="white"/>
+    </svg>
+  </div>
+  <h1>Label Ai</h1>
+  <p>Scan • Understand • Choose Better</p>
+  <button onclick="go('profile')">Next</button>
+</div>
+
+<!-- PROFILE -->
+<div class="page" id="profile">
+  <div class="progress">Step 1 of 2</div>
+  <div class="card">
+    <label>Name (Optional)</label>
+    <input placeholder="e.g. Alex">
+    <label>Age</label>
+    <input type="number">
+
+    <label>Allergies (Optional)</label>
+    <div class="toggle"><span>Milk / Dairy</span><input type="checkbox" class="allergy" value="milk"></div>
+    <div class="toggle"><span>Peanuts</span><input type="checkbox" class="allergy" value="peanut"></div>
+    <div class="toggle"><span>Tree Nuts</span><input type="checkbox" class="allergy" value="nuts"></div>
+    <div class="toggle"><span>Soy</span><input type="checkbox" class="allergy" value="soy"></div>
+    <div class="toggle"><span>Gluten / Wheat</span><input type="checkbox" class="allergy" value="gluten"></div>
+    <div class="toggle"><span>Eggs</span><input type="checkbox" class="allergy" value="egg"></div>
+
+    <button onclick="go('scanner')">Continue</button>
+  </div>
+</div>
+
+<!-- SCANNER -->
+<div class="page" id="scanner">
+  <div class="progress">Step 2 of 2</div>
+  <div class="card">
+    <label>Upload Ingredient Label</label>
+    <input type="file" id="imageInput" accept="image/*">
+    <button onclick="scan()">Analyze</button>
+  </div>
+  <div id="result"></div>
+  <div class="privacy">On-device scan • No data stored</div>
+</div>
+
+</div>
+
+<script>
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function getAllergies(){
+  return [...document.querySelectorAll('.allergy:checked')].map(a=>a.value);
+}
+function scan(){
+  const img=document.getElementById('imageInput').files[0];
+  if(!img){alert("Upload image");return;}
+  document.getElementById('result').innerHTML='<div class="card">Analyzing…</div>';
+  Tesseract.recognize(img,'eng').then(r=>analyze(r.data.text.toLowerCase()));
+}
+
+function analyze(text){
+  let score=10, flags="", badCap=0, goodCap=0;
+
+  const BAD_DB=[
+    ["sugar",1.5],["corn syrup",2],["glucose",1.2],["maltodextrin",1.5],
+    ["aspartame",2],["palm oil",1.5],["hydrogenated",2.5],
+    ["preservative",1.2],["colour",1],["flavour",1],
+    ["phosphoric acid",2.5],["sodium",1.2]
+  ];
+  const GOOD_DB=[
+    ["whole wheat",0.6],["oats",0.7],["fiber",0.6],["protein",0.6],
+    ["calcium",0.4],["iron",0.4],["vitamin",0.4],
+    ["probiotic",0.8],["nuts",0.5],["seeds",0.5]
+  ];
+
+  BAD_DB.forEach(([k,v])=>{
+    if(text.includes(k)&&badCap<6){
+      score-=v; badCap+=v;
+      flags+=`<div class="flag alert"><b>${k}</b> – unhealthy ingredient</div>`;
+    }
+  });
+
+  GOOD_DB.forEach(([k,v])=>{
+    if(text.includes(k)&&goodCap<2){
+      score+=v; goodCap+=v;
+      flags+=`<div class="flag good"><b>${k}</b> – beneficial ingredient</div>`;
+    }
+  });
+
+  getAllergies().forEach(a=>{
+    if(text.includes(a)){
+      score-=2;
+      flags+=`<div class="flag alert"><b>ALLERGY ALERT</b> – contains ${a}</div>`;
+    }
+  });
+
+  score=Math.min(10,Math.max(1,Math.round(score*10)/10));
+  let cls=score>=8?"green":score>=5?"yellow":"red";
+  let label=score>=8?"Good Choice":score>=5?"Consume Occasionally":"Limit Intake";
+
+  document.getElementById("result").innerHTML=`
+    <div class="card" style="text-align:center">
+      <div class="score-circle ${cls}">
+        <div class="score-text">${score}</div>
+      </div>
+      <div class="badge">${label}</div>
+    </div>
+    <div class="card">${flags||"No major concerns detected."}</div>`;
+}
+</script>
+</body>
+</html>
